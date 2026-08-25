@@ -6,8 +6,8 @@ import time
 import requests
 
 # Konfiguracja
-TARGET_URL = "https://metagarden.eu"
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1541812140766404669/mUHHRYZT5xkbjlJ8VwTAho8fGz-BOGapmnbrnV-_JOVdpQVyzeKAmmv4cr7iQxEkGa2i"
+TARGET_URL = "https://plan.zset.leszno.pl/"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1541824841223770223/qi7pA7RAW6alURfD8KnIhm8bE0Uv7FYc2PG6HfGG8W6QdVyINE6N2ogpxVnxoamtRP7B"
 CHECK_INTERVAL = 30  # w sekundach
 
 HEADERS = {
