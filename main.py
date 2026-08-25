@@ -51,6 +51,7 @@ def monitor_loop():
                     f"🚨 **Wykryto zmianę na stronie!**\n"
                     f"**URL:** {TARGET_URL}\n"
                     f"**Czas:** `{timestamp}`"
+                    f"@everyone @here @draze.kutasiarze"
                 )
                 print(alert)
                 send_discord_notification(alert)
