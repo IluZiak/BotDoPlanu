@@ -3,7 +3,7 @@ import time
 import requests
 
 TARGET_URL = "https://metagraden.eu"
-DISCORD_WEBHOOK_URL = "TUTAJ_WKLEJ_SWOJ_WEBHOOK_DISCORD"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1541812140766404669/mUHHRYZT5xkbjlJ8VwTAho8fGz-BOGapmnbrnV-_JOVdpQVyzeKAmmv4cr7iQxEkGa2i"
 CHECK_INTERVAL = 30  # co 30 sekund
 
 HEADERS = {
