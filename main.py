@@ -5,14 +5,16 @@ import threading
 import time
 import requests
 
+# Konfiguracja
 TARGET_URL = "https://metagraden.eu"
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1541812140766404669/mUHHRYZT5xkbjlJ8VwTAho8fGz-BOGapmnbrnV-_JOVdpQVyzeKAmmv4cr7iQxEkGa2i"
-CHECK_INTERVAL = 30
+DISCORD_WEBHOOK_URL = "TUTAJ_WKLEJ_SWOJ_WEBHOOK_DISCORD"
+CHECK_INTERVAL = 30  # w sekundach
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0",
-    "Cache-Control": "no-cache",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
     "Pragma": "no-cache",
+    "Expires": "0",
 }
 
 
@@ -24,7 +26,9 @@ def send_discord_notification(message: str):
 
 
 def get_page_hash(url: str):
-    res = requests.get(url, headers=HEADERS, timeout=15)
+    # Dodanie parametru czasowego wymusza pobranie świeżej wersji bez pamięci podręcznej serwera/CDN
+    fresh_url = f"{url}?_nocache={int(time.time() * 1000)}"
+    res = requests.get(fresh_url, headers=HEADERS, timeout=15)
     res.raise_for_status()
     return hashlib.sha256(res.text.encode("utf-8")).hexdigest()
 
@@ -40,6 +44,7 @@ def monitor_loop():
 
             if last_hash is None:
                 last_hash = current_hash
+                print("Zainicjalizowano pierwszy stan strony.")
             elif current_hash != last_hash:
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
                 alert = (
@@ -52,22 +57,19 @@ def monitor_loop():
                 last_hash = current_hash
 
         except Exception as e:
-            print(f"Błąd pobierania: {e}")
+            print(f"Błąd podczas sprawdzania strony: {e}")
 
         time.sleep(CHECK_INTERVAL)
 
 
-# Mini serwer HTTP dla Render.com, aby nie zamykał usługi
 def run_dummy_server():
+    # Mini-serwer HTTP wymagany przez darmowy plan Render.com
     port = int(os.environ.get("PORT", 10000))
     server = HTTPServer(("0.0.0.0", port), SimpleHTTPRequestHandler)
     server.serve_forever()
 
 
 if __name__ == "__main__":
-    # Uruchomienie pętli monitorującej w osobnym wątku
     t = threading.Thread(target=monitor_loop, daemon=True)
     t.start()
-
-    # Serwer HTTP trzyma proces przy życiu i zaspokaja wymogi Render
     run_dummy_server()
